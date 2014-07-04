@@ -50,4 +50,21 @@ class Groups extends AbstractApi
     {
         return $this->delete('groups/'.urlencode($group_id).'/members/'.urlencode($user_id));
     }
+
+    public function addKey($group_id, $key, $title)
+    {
+        $projects_api = new Projects($this->client);
+
+        $projects = $this->show($group_id)['projects'];
+
+        foreach ($projects as $project) {
+            $projects_api->addKey(
+                $project['id'],
+                $title,
+                $key
+            );
+        }
+
+        return true;
+    }
 }
