@@ -82,4 +82,11 @@ class Group extends AbstractModel
 
         return true;
     }
+
+    public function addKey($key, $title)
+    {
+        $this->api('groups')->addKey($this->id, $key, $title);
+
+        return true;
+    }
 }
