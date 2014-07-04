@@ -2,8 +2,6 @@
 
 namespace Gitlab\Api;
 
-use Gitlab\Api\Projects;
-
 class Groups extends AbstractApi
 {
     public function all($page = 1, $per_page = self::PER_PAGE)
