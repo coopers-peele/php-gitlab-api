@@ -55,12 +55,10 @@ class Groups extends AbstractApi
 
     public function addKey($group_id, $key, $title)
     {
-        $projects_api = new Projects($this->client);
+        $projects = new Projects($this->client);
 
-        $projects = $this->show($group_id)['projects'];
-
-        foreach ($projects as $project) {
-            $projects_api->addKey(
+        foreach ($this->show($group_id)['projects'] as $project) {
+            $projects->addKey(
                 $project['id'],
                 $title,
                 $key
