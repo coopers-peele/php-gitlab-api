@@ -2,6 +2,8 @@
 
 namespace Gitlab\Api;
 
+use Gitlab\Api\Projects;
+
 class Groups extends AbstractApi
 {
     public function all($page = 1, $per_page = self::PER_PAGE)
@@ -49,25 +51,5 @@ class Groups extends AbstractApi
     public function removeMember($group_id, $user_id)
     {
         return $this->delete('groups/'.urlencode($group_id).'/members/'.urlencode($user_id));
-    }
-
-    public function addKey($group_id, $key, $title)
-    {
-        $projects = new Projects($this->client);
-        $failed = array();
-
-        foreach ($this->show($group_id)['projects'] as $project) {
-            $added_key = $projects->addKey(
-                $project['id'],
-                $title,
-                $key
-            );
-
-            if (empty($projects->key($project['id'], $added_key['id']))) {
-                $failed[] = $project['id'];
-            }
-        }
-
-        return empty($failed) ? true : false ;
     }
 }

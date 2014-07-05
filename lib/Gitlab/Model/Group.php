@@ -3,6 +3,8 @@
 namespace Gitlab\Model;
 
 use Gitlab\Client;
+use Gitlab\Exception\RuntimeException;
+
 
 class Group extends AbstractModel
 {
@@ -83,10 +85,37 @@ class Group extends AbstractModel
         return true;
     }
 
-    public function addKey($key, $title)
+    public function addKey($title, $key)
     {
-        $this->api('groups')->addKey($this->id, $key, $title);
+         $projects = $this->show()->projects;
 
-        return true;
+         $keys = array();
+
+         foreach ($projects as $project) {
+            $_key = $project->addKey($title, $key);
+
+            if ($_key) {
+                $keys[$project->id] = $_key->id;
+            }
+        }
+
+        return $keys;
+    }
+
+    public function removeKey($key_id)
+    {
+        $projects = $this->show()->projects;
+
+        $keys = array();
+
+        foreach ($projects as $project) {
+            try {
+                $keys[$project->id] = $project->removeKey($key_id);
+            } catch (RuntimeException $e) {
+                // Ignore?
+            }
+        }
+
+        return $keys;
     }
 }
