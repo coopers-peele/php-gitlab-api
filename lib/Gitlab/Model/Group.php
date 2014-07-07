@@ -87,11 +87,11 @@ class Group extends AbstractModel
 
     public function addKey($title, $key)
     {
-         $projects = $this->show()->projects;
+        $projects = $this->show()->projects;
 
-         $keys = array();
+        $keys = array();
 
-         foreach ($projects as $project) {
+        foreach ($projects as $project) {
             $_key = $project->addKey($title, $key);
 
             if ($_key) {
